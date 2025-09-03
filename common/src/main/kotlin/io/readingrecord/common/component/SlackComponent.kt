@@ -1,6 +1,6 @@
 package io.readingrecord.common.component
 
-import io.readingrecord.common.config.SlackConfiguration
+import io.readingrecord.common.config.SlackProperties
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -10,13 +10,13 @@ import org.springframework.web.client.RestTemplate
 
 @Component
 class SlackComponent(
-    private val slackConfiguration: SlackConfiguration,
+    private val slackProperties: SlackProperties,
     private val restTemplate: RestTemplate
 ) {
     private val logger = LoggerFactory.getLogger(SlackComponent::class.java)
 
     fun sendMessage(message: String, channel: String) {
-        if (slackConfiguration.botToken.isBlank()) {
+        if (slackProperties.botToken.isBlank()) {
             logger.warn("Slack bot token is not configured. Message not sent: $message")
             return
         }
@@ -28,7 +28,7 @@ class SlackComponent(
 
         try {
             val headers = HttpHeaders().apply {
-                set("Authorization", "Bearer ${slackConfiguration.botToken}")
+                set("Authorization", "Bearer ${slackProperties.botToken}")
                 set("Content-Type", "application/json")
             }
 
@@ -38,7 +38,7 @@ class SlackComponent(
             )
 
             val request = HttpEntity(payload, headers)
-            val url = "${slackConfiguration.apiUrl}/chat.postMessage"
+            val url = "${slackProperties.apiUrl}/chat.postMessage"
 
             val response = restTemplate.exchange(
                 url,
