@@ -11,6 +11,7 @@ import org.springframework.transaction.reactive.TransactionalOperator
 @Configuration
 @EnableTransactionManagement
 class R2dbcConfig {
+
     @Bean
     fun transactionManager(connectionFactory: ConnectionFactory?): R2dbcTransactionManager {
         return R2dbcTransactionManager(connectionFactory!!)
