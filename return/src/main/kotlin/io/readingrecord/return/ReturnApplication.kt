@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @SpringBootApplication(scanBasePackages = ["io.readingrecord"])
 class ReturnApplication {
-
     @RestController
-    class IndexController(private val applicationContext: ApplicationContext) {
-
+    class IndexController(
+        private val applicationContext: ApplicationContext,
+    ) {
         @GetMapping
         fun index() = "%s is running!".format(applicationContext.id)
     }

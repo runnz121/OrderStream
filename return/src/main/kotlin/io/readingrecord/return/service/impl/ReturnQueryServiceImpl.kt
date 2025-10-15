@@ -9,21 +9,22 @@ import reactor.core.publisher.Mono
 
 @Service
 class ReturnQueryServiceImpl(
-    private val returnRepository: ReturnRepository
+    private val returnRepository: ReturnRepository,
 ) : ReturnQueryService {
-
     override fun getById(id: Long): Mono<ReturnResponse> =
-        returnRepository.findById(id)
+        returnRepository
+            .findById(id)
             .switchIfEmpty(Mono.error(ReturnNotFoundException(id)))
             .flatMap { e ->
                 // id가 null인 비정상 레코드 방어
                 if (e.id == null) {
                     Mono.error(ReturnNotFoundException(id))
-                }
-                else{
+                } else {
                     Mono.just(e.toResponse())
                 }
             }
 
-    class ReturnNotFoundException(id: Long) : RuntimeException("Return not found: $id")
+    class ReturnNotFoundException(
+        id: Long,
+    ) : RuntimeException("Return not found: $id")
 }

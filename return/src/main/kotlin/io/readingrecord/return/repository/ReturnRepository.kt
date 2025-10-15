@@ -5,6 +5,4 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ReturnRepository : ReactiveCrudRepository<ReturnEntity, Long> {
-
-}
+interface ReturnRepository : ReactiveCrudRepository<ReturnEntity, Long>

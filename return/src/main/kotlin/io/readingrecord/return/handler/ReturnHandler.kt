@@ -10,22 +10,22 @@ import reactor.core.publisher.Mono
 
 @Component
 class ReturnHandler(
-
-    private val returnQueryService: ReturnQueryService
+    private val returnQueryService: ReturnQueryService,
 ) {
-
     fun getStatus(req: ServerRequest): Mono<ServerResponse> {
         val idStr = req.pathVariable("id")
-        val id = idStr.toLongOrNull()
-            ?: return ServerResponse.badRequest().bodyValue("Invalid id: $idStr")
+        val id =
+            idStr.toLongOrNull()
+                ?: return ServerResponse.badRequest().bodyValue("Invalid id: $idStr")
 
-        return returnQueryService.getById(id)
+        return returnQueryService
+            .getById(id)
             .flatMap { dto ->
-                ServerResponse.ok()
+                ServerResponse
+                    .ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(dto)
-            }
-            .onErrorResume(ReturnQueryServiceImpl.ReturnNotFoundException::class.java) {
+            }.onErrorResume(ReturnQueryServiceImpl.ReturnNotFoundException::class.java) {
                 ServerResponse.notFound().build()
             }
     }
